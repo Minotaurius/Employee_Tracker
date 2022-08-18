@@ -5,12 +5,6 @@ const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const cTable = require('console.table');
 
-// const connection = mysql.createConnection({
-//     host: "localhost",
-//     database: "company_db",
-//     user: "root",
-//     password: "Superfoxgarfmode22!"
-// })
 
 // functions to navigate our menu in terminal
 
@@ -62,13 +56,6 @@ const mainMenu = () => {
 
 mainMenu()
 
-// async function viewDepts() {
-//     const viewDb = `SELECT department.id AS id, department.name AS department FROM department`;
-//     const depts = await db.query(viewDb);
-//     console.log(depts[0]);
-// } 
-
-
 const viewDepts = () => {
     console.log('Here are all current departments')
     var viewDB = `SELECT department.id AS id, department.name AS department FROM department`;
@@ -111,7 +98,21 @@ function viewEmployees() {
 };
 
 function addDept() {
-
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'addDept',
+            message: 'What new department would you like to add?'
+        }
+    ])
+    .then(answer => {
+        const newDept = `INSERT INTO department (name) VALUES (?)`;
+        db.query(newDept, answer.addDept, (err, data) => {
+            if(err) console.log(err);
+            console.log('We have created a' + " " + 'department.');
+            viewDepts()
+        })
+    })
 };
 
 function addRole() {
