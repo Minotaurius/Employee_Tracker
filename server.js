@@ -18,7 +18,7 @@ const mainMenu = () => {
     inquirer.prompt ([
         {
             type: 'list',
-            name: 'menu',
+            name: 'choices',
             message: 'Welcome! What would you like to do?',
             choices: ['View Departments', 'View Roles', 'View Employees', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role', 'Finished Updating Company Info']
         }
@@ -61,7 +61,6 @@ const mainMenu = () => {
 };
 
 mainMenu()
-// viewDepts()
 
 // async function viewDepts() {
 //     const viewDb = `SELECT department.id AS id, department.name AS department FROM department`;
@@ -80,8 +79,6 @@ const viewDepts = () => {
 });
 };
 
-// viewDepts()
-
 const viewRoles = () => {
     console.log('Here are all current roles')
     var viewRoles = `SELECT * FROM role`;
@@ -93,7 +90,13 @@ const viewRoles = () => {
 };
 
 function viewEmployees() {
-
+    console.log('Here are all current employees')
+    var viewEmps = `SELECT * FROM employee`;
+    db.query(viewEmps, (err, data) => {
+        if (err) return console.log(err);
+        console.table(data);
+        return mainMenu();
+})
 };
 
 function addDept() {
