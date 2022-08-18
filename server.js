@@ -16,12 +16,47 @@ function mainMenu() {
             type: 'list',
             name: 'menu',
             message: 'Welcome! What would you like to do?',
-            choices: ['View Departments', 'View Roles', 'View Roles', 'View Employees', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role']
+            choices: ['View Departments', 'View Roles', 'View Employees', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role']
         }
     ])
 };
 
-mainMenu();
+function init() {
+    mainMenu()
+    .then((answer => {
+        const { choices } = answer;
+
+        if (choices === "View Departments") {
+            viewDepts();
+        }
+
+        if (choices === "View Roles") {
+            viewRoles();
+        }
+
+        if (choices === "View Employees") {
+            viewEmployees();
+        }
+
+        if (choices === "Add Department") {
+            addDept();
+        }
+
+        if (choices === "Add Role") {
+            addRole();
+        }
+
+        if (choices === "Add Employee") {
+            addEmp();
+        }
+
+        if (choices === "Update Employee Role") {
+            updateEmpRole();
+        }
+    }))
+}
+
+// mainMenu();
 
 function viewDepts() {
 
@@ -43,10 +78,10 @@ function addRole() {
 
 };
 
-function addEmployee() {
+function addEmp() {
 
 };
 
-function updateEmployeeRole() {
+function updateEmpRole() {
 
 };
