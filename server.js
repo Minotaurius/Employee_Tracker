@@ -1,29 +1,29 @@
 // pulling in packages and connection from config
 
-const connection = require('./config/connection');
+const db = require('./db/connection');
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
+const cTable = require('console.table');
 
-connection.connect(err => {
-    if(err) throw err
-});
+// const connection = mysql.createConnection({
+//     host: "localhost",
+//     database: "company_db",
+//     user: "root",
+//     password: "Superfoxgarfmode22!"
+// })
 
 // functions to navigate our menu in terminal
 
-function mainMenu() {
+const mainMenu = () => {
     inquirer.prompt ([
         {
             type: 'list',
             name: 'menu',
             message: 'Welcome! What would you like to do?',
-            choices: ['View Departments', 'View Roles', 'View Employees', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role']
+            choices: ['View Departments', 'View Roles', 'View Employees', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role', 'Finished Updating Company Info']
         }
     ])
-};
-
-function init() {
-    mainMenu()
-    .then((answer => {
+    .then((answer) => {
         const { choices } = answer;
 
         if (choices === "View Departments") {
@@ -53,17 +53,43 @@ function init() {
         if (choices === "Update Employee Role") {
             updateEmpRole();
         }
-    }))
-}
 
-// mainMenu();
-
-function viewDepts() {
-
+        if(choices === "Finished Updating Company Info") {
+            connection.end()
+        };
+    });
 };
 
-function viewRoles() {
+mainMenu()
+// viewDepts()
 
+// async function viewDepts() {
+//     const viewDb = `SELECT department.id AS id, department.name AS department FROM department`;
+//     const depts = await db.query(viewDb);
+//     console.log(depts[0]);
+// } 
+
+
+const viewDepts = () => {
+    console.log('Here are all current departments')
+    var viewDB = `SELECT * FROM department`;
+    db.query(viewDB, (err, data) => {
+        if (err) return console.log(err);
+        console.table(data);
+        return mainMenu();
+});
+};
+
+// viewDepts()
+
+const viewRoles = () => {
+    console.log('Here are all current roles')
+    var viewRoles = `SELECT * FROM role`;
+    db.query(viewRoles, (err, data) => {
+        if (err) return console.log(err);
+        console.table(data);
+        return mainMenu();
+})
 };
 
 function viewEmployees() {
