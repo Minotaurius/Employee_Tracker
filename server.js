@@ -147,12 +147,12 @@ const addRole = () => {
                     choices: deptData
                 }
             ])
-            .then(choice => {
-                const dept = choice.deptData;
+            .then(answer => {
+                const dept = answer.whatDep;
                 newRole.push(dept);
 
-                const writeNewDept = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`
-                db.query(writeNewDept, newRole, (err, data) => {
+                const writeNewRole = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`
+                db.query(writeNewRole, newRole, (err, data) => {
                     if (err) console.log(err);
                     console.log('Added ' + answer.whatRole + ' to list of roles.');
                     viewRoles();
