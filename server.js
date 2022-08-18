@@ -71,7 +71,7 @@ mainMenu()
 
 const viewDepts = () => {
     console.log('Here are all current departments')
-    var viewDB = `SELECT * FROM department`;
+    var viewDB = `SELECT department.id AS id, department.name AS department FROM department`;
     db.query(viewDB, (err, data) => {
         if (err) return console.log(err);
         console.table(data);
@@ -81,7 +81,10 @@ const viewDepts = () => {
 
 const viewRoles = () => {
     console.log('Here are all current roles')
-    var viewRoles = `SELECT * FROM role`;
+    var viewRoles = `SELECT role.id,
+                            role.title,
+                            department.name AS department
+                            FROM role INNER JOIN department ON role.department_id = department.id`;
     db.query(viewRoles, (err, data) => {
         if (err) return console.log(err);
         console.table(data);
@@ -91,7 +94,15 @@ const viewRoles = () => {
 
 function viewEmployees() {
     console.log('Here are all current employees')
-    var viewEmps = `SELECT * FROM employee`;
+    var viewEmps = `SELECT employee.id, 
+                    employee.first_name, 
+                    employee.last_name, 
+                    department.name AS department, 
+                    role.salary AS salary,
+                    employee.manager_id
+                    FROM employee, department, role
+                    WHERE employee.role_id = role.id AND role.department_id = department.id
+                    `;
     db.query(viewEmps, (err, data) => {
         if (err) return console.log(err);
         console.table(data);
