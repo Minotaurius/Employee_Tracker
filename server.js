@@ -110,13 +110,54 @@ function addDept() {
         db.query(newDept, answer.addDept, (err, data) => {
             if(err) console.log(err);
             console.log('We have created a' + " " + 'department.');
-            viewDepts()
+            viewDepts();
         })
     })
 };
 
 function addRole() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'whatRole',
+            message: 'What new role would you like to add?'
+        },
+        {
+            type: 'input',
+            name: 'whatSal',
+            message: "What is the salary of this new role?"
+        }
+    ])
+    .then(answer => {
+        const newRole = [answer.whatRole, answer.whatSal]
+        const pushRole = `SELECT name, id FROM department`;
+        
+        db.query(pushRole, (err, data) => {
+            if(err) console.log(err);
+            const deptData = data.map(({ name, id }) => ({ name: name, value: id}));
 
+            inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'whatDep',
+                    message: 'What department is this new role in?',
+                    choices: deptData
+                }
+            ])
+            .then(choice => {
+                const dept = choice.deptData;
+                newRole.push(dept);
+
+                const writeNewDept = `INSERT INTO role (title, salary, department_id)
+                                    VALUES (?, ?, ?)`
+                db.query(writeNewDept, newRole, (err, data) => {
+                    if (err) console.log(err);
+                    console.log('Added ' + answer.whatRole + ' to list of roles.');
+                    viewRoles();
+                });
+            });
+        });
+    });
 };
 
 function addEmp() {
